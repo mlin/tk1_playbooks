@@ -1,0 +1,28 @@
+---
+- lineinfile: dest=/etc/ssh/sshd_config regexp=^PermitRootLogin line="PermitRootLogin no"
+- lineinfile: dest=/etc/ssh/sshd_config regexp=^RSAAuthentication line="RSAAuthentication no"
+- lineinfile: dest=/etc/ssh/sshd_config regexp=^PubkeyAuthentication line="PubkeyAuthentication no"
+- lineinfile: dest=/etc/sudoers.d/50-mlin create=yes line="mlin ALL=(ALL) NOPASSWD:ALL"
+- command: dpkg-statoverride --force --update --add root sudo 4750 /bin/su
+- file: path=/etc/sudoers.d/50-mlin owner=root group=root mode=0440
+- name: apt
+  apt: upgrade=full
+- apt: pkg={{item}}
+  with_items:
+  - ntp
+  - unattended-upgrades
+  - htop
+  - dstat
+  - secure-delete
+  - build-essential
+  - git
+- name: configure unattended upgrades
+  copy: src=10periodic dest=/etc/apt/apt.conf.d/10periodic
+- name: user mlin
+  user: name=mlin shell=/bin/bash uid=1861
+- lineinfile: dest=/etc/sudoers.d/50-mlin create=yes line="mlin ALL=(ALL) NOPASSWD:ALL"
+- file: path=/etc/sudoers.d/50-mlin owner=root group=root mode=0440
+#- name: disable default user accounts
+#  command: chage -E 0 {{item}}
+#  with_items:
+#  - ubuntu

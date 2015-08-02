@@ -1,0 +1,7 @@
+---
+- hosts: localhost
+  connection: local
+  roles:
+  - base
+#  - L4T-cuda
+#  - xbmc
