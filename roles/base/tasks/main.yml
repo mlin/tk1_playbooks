@@ -10,10 +10,6 @@
   - dstat
   - secure-delete
   - build-essential
-  - git
+  - flashplugin-installer
 - name: configure unattended upgrades
   copy: src=10periodic dest=/etc/apt/apt.conf.d/10periodic
-#- name: disable default user accounts
-#  command: chage -E 0 {{item}}
-#  with_items:
-#  - ubuntu
