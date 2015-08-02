@@ -20,6 +20,7 @@
     mode: 644
 - name: disable lock screen
   command: gsettings set org.gnome.desktop.screensaver ubuntu-lock-on-suspend 'false'
+- command: gsettings set org.gnome.desktop.screensaver lock-enabled false
 - name: disable sshd
   lineinfile: dest=/etc/ssh/sshd_config regexp=^PermitRootLogin line="PermitRootLogin no"
 - lineinfile: dest=/etc/ssh/sshd_config regexp=^RSAAuthentication line="RSAAuthentication no"
