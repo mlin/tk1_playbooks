@@ -6,7 +6,13 @@
 - name: remove password
   command: passwd ubuntu -d
 - name: autologin
-  copy: src=etc_lightdm_lightdm.conf.d_50autologin.conf dest=/etc/lightdm/lightdm.conf.d/50autologin
+  file: path=/etc/lightdm/lightdm.conf.d state=directory
+- copy:
+    src: etc_lightdm_lightdm.conf.d_50autologin.conf
+    dest: /etc/lightdm/lightdm.conf.d/50autologin
+    owner: root
+    group: root
+    mode: 644
 - name: disable lock screen
   command: gsettings set org.gnome.desktop.screensaver ubuntu-lock-on-suspend 'false'
 - name: apt
