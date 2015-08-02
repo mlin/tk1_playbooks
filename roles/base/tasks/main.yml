@@ -3,7 +3,10 @@
   command: dpkg-statoverride --force --update --add root sudo 4750 /bin/su
 - name: sudo NOPASSWD
   lineinfile: dest=/etc/sudoers.d/50-ubuntu create=yes line="ubuntu ALL=(ALL) NOPASSWD:ALL"
-- name: remove password command: passwd ubuntu -d
+- name: remove password
+  command: passwd ubuntu -d
+- name: autologin
+  copy: src=etc_lightdm_lightdm.conf.d_50autologin.conf dest=/etc/lightdm/lightdm.conf.d/50autologin
 - name: disable lock screen
   command: gsettings set org.gnome.desktop.screensaver ubuntu-lock-on-suspend 'false'
 - name: apt
