@@ -25,7 +25,7 @@
 - name: configure firewall
   lineinfile: dest=/etc/default/ufw create=yes line="IPV6=yes"
 - name: configure firewall
-  command: {{item}}
+  command: "{{item}}"
   with_items:
   - ufw reset
   - ufw default deny incoming
