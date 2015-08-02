@@ -1,8 +1,11 @@
 ---
-- command: dpkg-statoverride --force --update --add root sudo 4750 /bin/su
-- lineinfile: dest=/etc/sudoers.d/50-ubuntu create=yes line="ubuntu ALL=(ALL) NOPASSWD:ALL"
-- command: passwd ubuntu -d
-- command: update-rc.d ssh disable
+- name: deny non-admin users access to su
+  command: dpkg-statoverride --force --update --add root sudo 4750 /bin/su
+- name: sudo NOPASSWD
+  lineinfile: dest=/etc/sudoers.d/50-ubuntu create=yes line="ubuntu ALL=(ALL) NOPASSWD:ALL"
+- name: remove password command: passwd ubuntu -d
+- name: disable lock screen
+  command: gsettings set org.gnome.desktop.screensaver ubuntu-lock-on-suspend 'false'
 - name: apt
   apt: upgrade=full
 - apt: pkg={{item}}
@@ -13,5 +16,16 @@
   - dstat
   - secure-delete
   - build-essential
+  - ufw
 - name: configure unattended upgrades
   copy: src=10periodic dest=/etc/apt/apt.conf.d/10periodic
+- name: configure firewall
+  lineinfile: dest=/etc/default/ufw create=yes line="IPV6=yes"
+- name: configure firewall
+  command: {{item}}
+  with_items:
+  - ufw reset
+  - ufw default deny incoming
+  - ufw default allow outgoing
+  - ufw disable
+  - ufw enable
