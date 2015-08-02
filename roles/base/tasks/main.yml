@@ -6,7 +6,12 @@
 - name: remove password
   command: passwd ubuntu -d
 - name: autologin
-  file: path=/etc/lightdm/lightdm.conf.d state=directory
+  file:
+    path: /etc/lightdm/lightdm.conf.d
+    state: directory
+    owner: root
+    group: root
+    mode: u=rwX,g=rX,o=rX
 - copy:
     src: etc_lightdm_lightdm.conf.d_50autologin.conf
     dest: /etc/lightdm/lightdm.conf.d/50autologin
@@ -15,6 +20,11 @@
     mode: 644
 - name: disable lock screen
   command: gsettings set org.gnome.desktop.screensaver ubuntu-lock-on-suspend 'false'
+- name: disable sshd
+  lineinfile: dest=/etc/ssh/sshd_config regexp=^PermitRootLogin line="PermitRootLogin no"
+- lineinfile: dest=/etc/ssh/sshd_config regexp=^RSAAuthentication line="RSAAuthentication no"
+- lineinfile: dest=/etc/ssh/sshd_config regexp=^PubkeyAuthentication line="PubkeyAuthentication no"
+- lineinfile: dest=/etc/ssh/sshd_config regexp=^PasswordAuthentication line="PasswordAuthentication no"
 - name: apt
   apt: upgrade=full
 - apt: pkg={{item}}
@@ -25,16 +35,5 @@
   - dstat
   - secure-delete
   - build-essential
-  - ufw
 - name: configure unattended upgrades
   copy: src=10periodic dest=/etc/apt/apt.conf.d/10periodic
-- name: configure firewall
-  lineinfile: dest=/etc/default/ufw create=yes regexp=^IPV6= line="IPV6=no"
-- name: configure firewall
-  command: "{{item}}"
-  with_items:
-  - ufw reset
-  - ufw default deny incoming
-  - ufw default allow outgoing
-  - ufw enable
-  - ufw reload
