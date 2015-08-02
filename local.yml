@@ -3,5 +3,5 @@
   connection: local
   roles:
   - base
+  - xbmc
 #  - L4T-cuda
-#  - xbmc
