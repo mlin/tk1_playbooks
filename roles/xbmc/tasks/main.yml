@@ -1,5 +1,0 @@
----
-- apt_repository: repo='ppa:kulve/xbmc-jetson-tk1'
-- apt: pkg={{item}}
-  with_items:
-  - kodi

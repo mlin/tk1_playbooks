@@ -1,0 +1,11 @@
+---
+- apt_repository: repo='ppa:kulve/xbmc-jetson-tk1'
+- apt: pkg={{item}}
+  with_items:
+  - kodi
+  - chromium-browser
+- name: download pepperflash
+  get_url: url=http://odroidxu.leeharris.me.uk/PepperFlash-15.0.0.152.r2-armv7h.tar.gz dest=/root/PepperFlash.tar.gz
+# https://www.raspberrypi.org/forums/viewtopic.php?f=66&t=99202
+# https://devtalk.nvidia.com/default/topic/754436/jetson-tk1-add-web-browser-flash-support-for-the-chromium-browser/
+
