@@ -1,5 +1,7 @@
 ---
 - command: dpkg-statoverride --force --update --add root sudo 4750 /bin/su
+- lineinfile: dest=/etc/sudoers.d/50-ubuntu create=yes line="ubuntu ALL=(ALL) NOPASSWD:ALL"
+- command: passwd ubuntu -d
 - name: apt
   apt: upgrade=full
 - apt: pkg={{item}}
@@ -10,6 +12,5 @@
   - dstat
   - secure-delete
   - build-essential
-  - flashplugin-installer
 - name: configure unattended upgrades
   copy: src=10periodic dest=/etc/apt/apt.conf.d/10periodic
